@@ -1,0 +1,100 @@
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px;
+	background-color: #f0f0f0;
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.column {
+	width: 48%;
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	margin-bottom: 20px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	text-align: center;
+}
+
+.result {
+	font-size: 1.2em;
+	font-weight: bold;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	background-color: #e9e9e9;
+	border-radius: 5px;
+}
+
+.option-row,
+.engraving-option,
+.accessory-option,
+.elixir-option {
+	margin-bottom: 10px;
+}
+
+label {
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
+input[type="number"] {
+	width: 60px;
+}
+
+#calculateButton {
+	display: block;
+	margin: 20px auto;
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+#calculateButton:hover {
+	background-color: #45a049;
+}
+
+.engraving-section,
+.accessories-section,
+.elixir-section {
+	margin-top: 20px;
+}
+
+select {
+	margin-right: 10px;
+}
+
+.search-container {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
+
+#searchInput {
+	padding: 5px;
+	width: 200px;
+}
+
+#searchButton {
+	padding: 5px 10px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+}
