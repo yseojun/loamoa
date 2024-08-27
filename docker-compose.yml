@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  be:
+    build:
+      context: ./BE
+      dockerfile: Dockerfile
+    environment:
+      - JWT_TOKEN=${JWT_TOKEN}
+    ports:
+      - "8000:8000"
+    networks:
+      - loamoa
+
+networks:
+  loamoa:
+    driver: bridge
