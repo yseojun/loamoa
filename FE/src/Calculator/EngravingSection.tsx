@@ -45,7 +45,7 @@ const EngravingSection: React.FC<EngravingSectionProps> = ({ onEngravingChange }
   const handleEngravingChange = (index: number, field: "type" | "level", value: string) => {
     const newEngravings = [...engravings];
     if (field === "type") {
-      newEngravings[index] = { type: value as EngravingType, level: "전설0" };
+      newEngravings[index] = { type: value as EngravingType, level: "유물0" };
     } else {
       newEngravings[index] = { ...newEngravings[index], [field]: value as EngravingLevel };
     }
@@ -66,28 +66,21 @@ const EngravingSection: React.FC<EngravingSectionProps> = ({ onEngravingChange }
 
       switch (engraving.type) {
         case "아드레날린":
-          criticalHitRate += 8 + levelIndex * 1.5;
+          criticalHitRate += 14 + levelIndex * 1.5;
           attackPowerIncrease += 5.4;
           break;
         case "예리한 둔기":
-          criticalDamage += 36 + levelIndex * 2;
+          criticalDamage += 44 + levelIndex * 2;
           break;
         case "저주받은 인형":
-          cursedDollEffect = 11 + levelIndex * 0.75;
+          cursedDollEffect = 14 + levelIndex * 0.75;
           break;
         case "슈퍼 차지":
-          chargeDamage += 16 + levelIndex * 0.5;
+          chargeDamage += 18 + levelIndex * 0.75;
           break;
         case "기습의 대가":
-          if (levelIndex <= 3) {
-            // 전설0~4 구간에서만 적용
-            backAttackDamage += 12 + levelIndex * 0.75;
-            ambushMasterEffect += 4 + levelIndex * 0.2;
-          } else {
-            // 유물 구간에서는 전설4의 값을 유지
-            backAttackDamage += 15;
-            ambushMasterEffect += 4.8 + (levelIndex - 4) * 0.7;
-          }
+          backAttackDamage += 15;
+          ambushMasterEffect += 4.8 + levelIndex * 0.7;
           break;
       }
     });

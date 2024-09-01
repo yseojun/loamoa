@@ -228,11 +228,11 @@ const EfficientCalculator: React.FC = () => {
   return (
     <CalculatorContainer>
       <SectionTitle>
-        <Text variant="title">효율 계산기</Text>
+        <Text variant="subtitle">스트라이커 효율 계산기</Text>
       </SectionTitle>
       <EfficiencyResult>
-        <Text variant="subtitle">효율 : </Text>
-        <Text variant="body">{`${calculateEfficiency.toFixed(2)}%`}</Text>{" "}
+        <Text variant="subtitle">데미지 : </Text>
+        <Text variant="body">{`${calculateEfficiency.toFixed(2)}`}</Text>{" "}
       </EfficiencyResult>
       <HorizontalLayout>
         <Column>

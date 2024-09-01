@@ -50,7 +50,7 @@ export const useEfficiencyCalculation = ({
     const backAttackRateDecimal = backAttackRate / 100;
 
     console.log("백어택 시 치명타 확률:", criticalHitRateWithBackAttack * 100, "%");
-    console.log("백어택 확률 (소수):", backAttackRateDecimal);
+    console.log("백어택 확률 :", backAttackRateDecimal);
 
     const criticalDamageCalculation = (rate: number) => {
       const result = rate * criticalDamage * (criticalHitDamage + 100) + (1 - rate);

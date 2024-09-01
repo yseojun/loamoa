@@ -17,15 +17,15 @@ const TextStyles = {
   subtitle: css`
     font-size: 1.2rem;
     font-weight: 600;
-    color: white;
+    color: black;
   `,
   body: css`
     font-size: 1rem;
-    color: white;
+    color: black;
   `,
   caption: css`
     font-size: 0.875rem;
-    color: white;
+    color: black;
   `,
 };
 

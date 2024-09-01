@@ -97,8 +97,8 @@ const AccessorySection: React.FC<AccessorySectionProps> = ({ ring1, ring2, brace
                 min={0}
                 max={100}
                 step={0.1}
-                label="Value" // 예시 label
-                defaultValue={0} // 예시 defaultValue
+                label=""
+                defaultValue={0}
               />
             )}
           </OptionRow>
