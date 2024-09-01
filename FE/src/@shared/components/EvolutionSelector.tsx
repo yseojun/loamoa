@@ -10,13 +10,13 @@ const SelectorContainer = styled.div<{ disabled: boolean }>`
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
-const CheckboxContainer = styled.div`
+const CheckBoxContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
 `;
 
-const Checkbox = styled.input`
+const CheckBox = styled.input`
   margin-right: 0.5rem;
 `;
 
@@ -81,7 +81,7 @@ const EvolutionSelector: React.FC<EvolutionSelectorProps> = ({ name, value, maxV
     setInputValue(value.toString());
   }, [value]);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
     if (!event.target.checked) {
       onChange(0);
@@ -109,10 +109,10 @@ const EvolutionSelector: React.FC<EvolutionSelectorProps> = ({ name, value, maxV
 
   return (
     <SelectorContainer disabled={disabled}>
-      <CheckboxContainer>
-        <Checkbox type="checkbox" checked={isChecked} onChange={handleCheckboxChange} disabled={disabled} />
+      <CheckBoxContainer>
+        <CheckBox type="checkbox" checked={isChecked} onChange={handleCheckBoxChange} disabled={disabled} />
         <Text variant="body">{name}</Text>
-      </CheckboxContainer>
+      </CheckBoxContainer>
       <ValueContainer>
         <ValueButton onClick={handleDecrement} disabled={disabled || !isChecked || value === 0}>
           -

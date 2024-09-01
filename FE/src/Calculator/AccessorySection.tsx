@@ -85,6 +85,7 @@ const AccessorySection: React.FC<AccessorySectionProps> = ({ ring1, ring2, brace
         {[1, 2].map((optionNumber) => (
           <OptionRow key={optionNumber}>
             <TextSelector<AccessoryOption>
+              label=""
               options={["없음", "치명타 피해", "치명타 확률"]}
               value={accessory[`option${optionNumber}` as keyof AccessoryItem] as AccessoryOption}
               onChange={(value) => handleOptionChange(name as "ring1" | "ring2" | "bracelet", optionNumber as 1 | 2, value)}
@@ -96,6 +97,8 @@ const AccessorySection: React.FC<AccessorySectionProps> = ({ ring1, ring2, brace
                 min={0}
                 max={100}
                 step={0.1}
+                label="Value" // 예시 label
+                defaultValue={0} // 예시 defaultValue
               />
             )}
           </OptionRow>

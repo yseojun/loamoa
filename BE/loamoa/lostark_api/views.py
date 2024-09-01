@@ -51,10 +51,11 @@ class LostArkAPIView(APIView):
                 "status": "success",
                 "data": {
                     "characterInfo": self.set_profile(data.get('ArmoryProfile', {})),
-                    "stats": self.set_stats(data.get('ArmoryProfile', {}).get('Stats', [])),
-                    "engravings": self.set_engraving(data.get('ArmoryEngraving')),
-                    "accessories": self.set_equipment(data.get('ArmoryEquipment', [])),
-                    "elixir": self.set_elixir(data.get('ArmoryEquipment', []))
+                    # "stats": self.set_stats(data.get('ArmoryProfile', {}).get('Stats', [])),
+                    # "engravings": self.set_engraving(data.get('ArmoryEngraving')),
+                    # "accessories": self.set_equipment(data.get('ArmoryEquipment', [])),
+                    # "elixir": self.set_elixir(data.get('ArmoryEquipment', [])),
+                    # "ArkPassive" : ""
                 }
             }
             return processed_data
@@ -71,6 +72,7 @@ class LostArkAPIView(APIView):
     def set_profile(self, profile_data: Dict[str, Any]) -> Dict[str, Any]:
         try:
             return {
+                "api" : profile_data,
                 "name": profile_data.get('CharacterName'),
                 "server": profile_data.get('ServerName'),
                 "class": profile_data.get('CharacterClassName'),
@@ -233,7 +235,7 @@ class LostArkAPIView(APIView):
     @action(detail=False, methods=['get'])
     def get_character_info(self, request):
         character_name = request.GET.get('character', '양서준')
-        api_url = f"{LOSTARK_API_URL}/armories/characters/{character_name}"
+        api_url = f"{LOSTARK_API_URL}/armories/characters/{character_name}?filters=profiles%2Bequipment%2Bavatars%2Bcombat-skills%2Bengravings%2Bcards%2Bgems%2Barkpassive"
         return self.make_request(api_url, character_name)
 
     def get(self, request, *args, **kwargs):

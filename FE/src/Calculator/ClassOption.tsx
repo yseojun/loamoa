@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Text } from "@/@shared/ui-kit";
-import Checkbox from "@/@shared/components/Checkbox";
+import Checkbox from "@/@shared/components/CheckBox";
 import NumberSelector from "@/@shared/components/NumberSelector";
 
 const Section = styled.div`

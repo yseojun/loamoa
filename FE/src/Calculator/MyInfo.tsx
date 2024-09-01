@@ -103,11 +103,20 @@ const MyInfo: React.FC<MyInfoProps> = ({
       </Item>
       <Item>
         <Label variant="body">백어택 확률 :</Label>
-        <StyledNumberSelector value={backAttackRate} onChange={onBackAttackRateChange} min={0} max={100} step={1} unit="%" defaultValue={100} />
+        <StyledNumberSelector
+          label="백어택 확률"
+          value={backAttackRate}
+          onChange={onBackAttackRateChange}
+          min={0}
+          max={100}
+          step={1}
+          unit="%"
+          defaultValue={100}
+        />
       </Item>
       <Item>
         <Label variant="body">무기 품질 :</Label>
-        <StyledNumberSelector value={weaponQuality} onChange={setWeaponQuality} min={0} max={100} step={1} unit="%" defaultValue={100} />
+        <StyledNumberSelector label="무기 품질" value={weaponQuality} onChange={setWeaponQuality} min={0} max={100} step={1} unit="%" defaultValue={100} />
       </Item>
     </Section>
   );

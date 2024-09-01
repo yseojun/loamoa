@@ -3,3 +3,4 @@ djangorestframework
 requests
 gunicorn
 bs4
+pymemcache

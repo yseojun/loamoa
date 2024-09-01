@@ -39,11 +39,11 @@ const BasicOption: React.FC<BasicOptionProps> = ({ expeditionCritical, setExpedi
       <Text variant="subtitle">기본 옵션</Text>
       <Item>
         <Label variant="body">원정대 치명 : </Label>
-        <StyledNumberSelector value={expeditionCritical} onChange={setExpeditionCritical} min={0} max={1000} step={1} defaultValue={66} />
+        <StyledNumberSelector label="원정대 치명" value={expeditionCritical} onChange={setExpeditionCritical} min={0} max={1000} step={1} defaultValue={66} />
       </Item>
       <Item>
         <Label variant="body">펫 효과</Label>
-        <StyledButtonSelector<"특화" | "치명"> options={["특화", "치명"]} value={petEffect} onChange={setPetEffect} />
+        <StyledButtonSelector<"특화" | "치명"> label="펫 효과" options={["특화", "치명"]} value={petEffect} onChange={setPetEffect} />
       </Item>
     </Section>
   );

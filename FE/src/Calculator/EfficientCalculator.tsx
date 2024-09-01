@@ -232,7 +232,7 @@ const EfficientCalculator: React.FC = () => {
       </SectionTitle>
       <EfficiencyResult>
         <Text variant="subtitle">효율 : </Text>
-        <Text>{`${calculateEfficiency.toFixed(2)}%`}</Text>
+        <Text variant="body">{`${calculateEfficiency.toFixed(2)}%`}</Text>{" "}
       </EfficiencyResult>
       <HorizontalLayout>
         <Column>

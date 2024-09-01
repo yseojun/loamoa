@@ -47,7 +47,7 @@ const EngravingSection: React.FC<EngravingSectionProps> = ({ onEngravingChange }
     if (field === "type") {
       newEngravings[index] = { type: value as EngravingType, level: "전설0" };
     } else {
-      newEngravings[index] = { ...newEngravings[index], [field]: value };
+      newEngravings[index] = { ...newEngravings[index], [field]: value as EngravingLevel };
     }
     setEngravings(newEngravings);
   };
