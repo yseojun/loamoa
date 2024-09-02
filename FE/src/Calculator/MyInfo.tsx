@@ -66,7 +66,7 @@ const MyInfo: React.FC<MyInfoProps> = ({
         <Text variant="subtitle">내 정보</Text>
       </SectionTitle>
       <Item>
-        <Label variant="body">공격력 : </Label>
+        <Label variant="body">공격력 증가 : </Label>
         <Value variant="body">{attackPower.toFixed(0)}</Value>
       </Item>
       <Item>
@@ -102,9 +102,8 @@ const MyInfo: React.FC<MyInfoProps> = ({
         <Value variant="body">{backAttackDamage.toFixed(1)}%</Value>
       </Item>
       <Item>
-        <Label variant="body">백어택 확률 :</Label>
         <StyledNumberSelector
-          label="백어택 확률"
+          label="백어택 확률 :"
           value={backAttackRate}
           onChange={onBackAttackRateChange}
           min={0}
@@ -115,8 +114,7 @@ const MyInfo: React.FC<MyInfoProps> = ({
         />
       </Item>
       <Item>
-        <Label variant="body">무기 품질 :</Label>
-        <StyledNumberSelector label="무기 품질" value={weaponQuality} onChange={setWeaponQuality} min={0} max={100} step={1} unit="%" defaultValue={100} />
+        <StyledNumberSelector label="무기 품질 :" value={weaponQuality} onChange={setWeaponQuality} min={0} max={100} step={1} unit="%" defaultValue={100} />
       </Item>
     </Section>
   );
