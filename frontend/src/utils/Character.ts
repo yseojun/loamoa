@@ -24,6 +24,7 @@ export class Character {
     blunt_level: number = 0;
     attack_dmg: number = 1;
     crit_stat: number = 66;
+    is_keen: boolean = false;
     skillRatios: { [key: string]: number };
 
     constructor(fixedStats: FixedStats, selectableStats: SelectableStats, skillRatios: { [key: string]: number }) {
@@ -103,6 +104,7 @@ export class Character {
         let value = 0.44 + (artifactLevel * 0.02);
         value += [0, 0.075, 0.094, 0.132, 0.15][abilityStoneLevel];
         this.crit_dmg += value;
+        this.is_keen = true;
     }
 
     apply_master_brawler(artifactLevel: number, abilityStoneLevel: number) {
@@ -193,7 +195,7 @@ export class Character {
     }
 
     calculate_evol_dmg(crit_rate: number): number {
-        let blunt_dmg = 1;
+        let blunt_dmg = 0;
         if (this.blunt_level > 0) {
             const base_blunt_dmg = this.blunt_level === 1 ? 0.075 : 0.15;
             const conversion_rate = this.blunt_level === 1 ? 1.2 : 1.4;
@@ -223,7 +225,10 @@ export class Character {
     get_final_dmg(back_rate: number): number {
         const total_dmg = this.calculate_back_attack_dmg(back_rate);
         const chargeSkillsMultiplier = this.calculate_charge_skills_multiplier();
-        return total_dmg * this.engraving_dmg * this.additional_dmg * this.attack_dmg * chargeSkillsMultiplier;
+        let keen_panalty = 1;
+        if (this.is_keen === true)
+            keen_panalty = 0.98;
+        return total_dmg * this.engraving_dmg * this.additional_dmg * keen_panalty * this.attack_dmg * chargeSkillsMultiplier;
     }
 
     calculate_charge_skills_multiplier(): number {
