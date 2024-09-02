@@ -115,7 +115,7 @@ export class Character {
     apply_adrenaline(artifactLevel: number, abilityStoneLevel: number) {
         this.crit_rate += 0.14 + (artifactLevel * 0.015);
         let attackValue = 0.054;
-        attackValue += [0, 0.0048, 0.006, 0.0083, 0.0095][abilityStoneLevel];
+        attackValue += [0, 0.0288, 0.036, 0.0498, 0.057][abilityStoneLevel];
         this.attack_dmg += attackValue;
     }
 

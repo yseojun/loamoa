@@ -1,5 +1,5 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from 'styled-components';
 
 const GraphContainer = styled.div`
@@ -46,37 +46,55 @@ interface CalculationResultGraphProps {
 }
 
 const CalculationResultGraph: React.FC<CalculationResultGraphProps> = ({ results }) => {
-  const data = Array.from({ length: 10 }, (_, i) => ({
-    backAttackRate: (i + 1) * 10,
-    ...results.reduce<Record<string, number>>((acc, result) => {
-      acc[`세팅${result.id}`] = result.results[i + 1];
-      return acc;
-    }, {})
-  }));
+  const data = useMemo(() => {
+    return Array.from({ length: 10 }, (_, i) => ({
+      backAttackRate: (i + 1) * 10,
+      ...results.reduce<Record<string, number>>((acc, result) => {
+        acc[`세팅${result.id}`] = result.results[i + 1];
+        return acc;
+      }, {})
+    }));
+  }, [results]);
+
+  const minValue = useMemo(() => {
+    const allValues = data.flatMap(entry => 
+      results.map(result => entry[`세팅${result.id}`])
+    );
+    return Math.min(...allValues);
+  }, [data, results]);
+
+  const yAxisDomain = useMemo(() => {
+    const buffer = minValue * 0.01; // 5% buffer
+    return ([dataMin, dataMax]: [number, number], allowDataOverflow: boolean): [number, number] => {
+      return [Math.floor(dataMin - buffer), dataMax];
+    };
+  }, [minValue]);
 
   return (
     <GraphContainer>
       <ResponsiveContainer width="100%" height={300} >
-      <LineChart data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 30 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
+        <LineChart data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 30 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
             dataKey="backAttackRate" 
             label={{ value: '백어택 확률 (%)', position: 'insideBottom', offset: -10 }}
-        />
-        <YAxis
-            label={{ value: '데미지', position: 'insideLeft', offset: -20 }}
-        />
-        <Tooltip />
-        {results.map((result, index) => (
+          />
+          <YAxis
+            label={{ value: '데미지', position: 'insideLeft', angle: -90, offset: 10 }}
+            domain={yAxisDomain}
+            tick={false}  // Y축 눈금 숫자를 숨깁니다
+          />
+          <Tooltip />
+          {results.map((result, index) => (
             <Line
-            key={result.id}
-            type="monotone"
-            dataKey={`세팅${result.id}`}
-            stroke={getColor(index)}
-            activeDot={{ r: 8 }}
+              key={result.id}
+              type="monotone"
+              dataKey={`세팅${result.id}`}
+              stroke={getColor(index)}
+              activeDot={{ r: 8 }}
             />
-        ))}
+          ))}
         </LineChart>
       </ResponsiveContainer>
       <ColorLegend>

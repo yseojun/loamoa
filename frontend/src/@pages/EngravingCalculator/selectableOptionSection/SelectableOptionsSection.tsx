@@ -104,7 +104,7 @@ const initialSetting: CustomSetting = {
     { engraving: '슈퍼차지', level: '유물4', abilityStone: '0lv' },
   ],
   evolution: [
-    0, 30, 10, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 30, 0, 0
+    0, 30, 10, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 30, 0, 0
   ],
 };
 
