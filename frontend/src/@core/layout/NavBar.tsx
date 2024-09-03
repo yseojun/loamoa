@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Container } from '@/styles';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 
 const Nav = styled.nav`
   background-color: #1a202c;
@@ -8,9 +8,22 @@ const Nav = styled.nav`
   width: 100%;
 `;
 
-const LogoContainer = styled.div`
+const Container = styled.div`
+  margin: 0 auto;
+  padding: 0.1rem;
+`;
+
+const NavContent = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  height: 1rem;
+`;
+
+const LogoContainer = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 `;
 
 const Logo = styled.img`
@@ -26,15 +39,14 @@ const LogoText = styled.span`
 `;
 
 const SearchContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const SearchInputContainer = styled.div`
   position: relative;
-  width: 100%;
-  max-width: 20rem;
+  width: 20rem;
 `;
 
 const SearchInput = styled.input`
@@ -45,30 +57,77 @@ const SearchInput = styled.input`
   width: 100%;
 `;
 
-const SearchIcon = styled.img`
+const SearchIconSpan = styled.span`
   position: absolute;
   left: 0.75rem;
-  top: 0.625rem;
-  width: 1.25rem;
-  height: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
   color: #a0aec0;
 `;
 
-const NavBar: React.FC = () => (
-  <Nav>
-    <Container>
-      <LogoContainer>
-        <Logo src="/icon.svg" alt="Loamoa Logo" />
-        <LogoText>Loamoa</LogoText>
-      </LogoContainer>
-      <SearchContainer>
-        <SearchInputContainer>
-          <SearchInput type="text" placeholder="검색..." />
-          <SearchIcon src="/icon.svg" alt="Search" />
-        </SearchInputContainer>
-      </SearchContainer>
-    </Container>
-  </Nav>
-);
+const MenuContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  background-color: #394456;
+  padding: 0.1rem 0.5rem;
+`;
+
+const MenuItem = styled(Link)`
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  &:hover {
+    background-color: #4a5568;
+    border-radius: 0.25rem;
+  }
+`;
+
+interface NavBarProps {
+  showSearch: boolean;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ showSearch }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/character/${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm("");
+    }
+  };
+
+  return (
+    <>
+      <Nav>
+        <Container>
+          <NavContent>
+            <LogoContainer to="/">
+              <Logo src="/icon.svg" alt="Loamoa Logo" />
+              <LogoText>Loamoa</LogoText>
+            </LogoContainer>
+            {showSearch && (
+              <SearchContainer>
+                <SearchInputContainer>
+                  <form onSubmit={handleSearch}>
+                    <SearchInput type="text" placeholder="캐릭터 검색..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                    <SearchIconSpan>🔍</SearchIconSpan>
+                  </form>
+                </SearchInputContainer>
+              </SearchContainer>
+            )}
+          </NavContent>
+        </Container>
+      </Nav>
+      <MenuContainer>
+        <MenuItem to="/">홈</MenuItem>
+        <MenuItem to="/efficiency-calc">효율 계산</MenuItem>
+        <MenuItem to="/tools">도구</MenuItem>
+      </MenuContainer>
+    </>
+  );
+};
 
 export default NavBar;

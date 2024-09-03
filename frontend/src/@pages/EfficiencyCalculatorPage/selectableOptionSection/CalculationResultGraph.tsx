@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import styled from 'styled-components';
+import React, { useMemo } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import styled from "styled-components";
 
 const GraphContainer = styled.div`
   background-color: white;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom:10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 `;
 
 const ColorLegend = styled.div`
@@ -29,10 +29,7 @@ const ColorBox = styled.div`
   border-radius: 3px;
 `;
 
-const COLORS = [
-  '#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088FE', 
-  '#00C49F', '#FFBB28', '#FF8042', '#a4de6c', '#d0ed57'
-];
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#a4de6c", "#d0ed57"];
 
 const getColor = (index: number): string => COLORS[index % COLORS.length];
 
@@ -45,55 +42,44 @@ interface CalculationResultGraphProps {
   results: Result[];
 }
 
+interface DataPoint {
+  backAttackRate: number;
+  [key: string]: number; // 인덱스 시그니처 추가
+}
+
 const CalculationResultGraph: React.FC<CalculationResultGraphProps> = ({ results }) => {
-  const data = useMemo(() => {
+  const data: DataPoint[] = useMemo(() => {
     return Array.from({ length: 10 }, (_, i) => ({
       backAttackRate: (i + 1) * 10,
       ...results.reduce<Record<string, number>>((acc, result) => {
-        acc[`세팅${result.id}`] = result.results[i + 1];
+        acc[`세팅${result.id}`] = result.results[i + 1] || 0; // undefined 방지
         return acc;
-      }, {})
+      }, {}),
     }));
   }, [results]);
 
   const minValue = useMemo(() => {
-    const allValues = data.flatMap(entry => 
-      results.map(result => entry[`세팅${result.id}`])
-    );
+    const allValues = data.flatMap((entry) => results.map((result) => entry[`세팅${result.id}`] as number));
     return Math.min(...allValues);
   }, [data, results]);
 
   const yAxisDomain = useMemo(() => {
-    const buffer = minValue * 0.01; // 5% buffer
-    return ([dataMin, dataMax]: [number, number], allowDataOverflow: boolean): [number, number] => {
+    const buffer = minValue * 0.01;
+    return ([dataMin, dataMax]: [number, number]): [number, number] => {
       return [Math.floor(dataMin - buffer), dataMax];
     };
   }, [minValue]);
 
   return (
     <GraphContainer>
-      <ResponsiveContainer width="100%" height={300} >
-        <LineChart data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 30 }}>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 30 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-            dataKey="backAttackRate" 
-            label={{ value: '백어택 확률 (%)', position: 'insideBottom', offset: -10 }}
-          />
-          <YAxis
-            label={{ value: '데미지', position: 'insideLeft', angle: -90, offset: 10 }}
-            domain={yAxisDomain}
-            tick={false}  // Y축 눈금 숫자를 숨깁니다
-          />
+          <XAxis dataKey="backAttackRate" label={{ value: "백어택 확률 (%)", position: "insideBottom", offset: -10 }} />
+          <YAxis label={{ value: "데미지", position: "insideLeft", angle: -90, offset: 10 }} domain={yAxisDomain} tick={false} />
           <Tooltip />
           {results.map((result, index) => (
-            <Line
-              key={result.id}
-              type="monotone"
-              dataKey={`세팅${result.id}`}
-              stroke={getColor(index)}
-              activeDot={{ r: 8 }}
-            />
+            <Line key={result.id} type="monotone" dataKey={`세팅${result.id}`} stroke={getColor(index)} activeDot={{ r: 8 }} />
           ))}
         </LineChart>
       </ResponsiveContainer>

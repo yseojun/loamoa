@@ -1,15 +1,15 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-start;  // space-between 대신 flex-start 사용
-  gap: 1rem;  // 요소들 사이에 간격 추가
+  justify-content: flex-start; // space-between 대신 flex-start 사용
+  gap: 1rem; // 요소들 사이에 간격 추가
 `;
-  
-  export const SectionTitle = styled.h2`
+
+export const SectionTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 1rem;
@@ -42,12 +42,12 @@ export const Button = styled.button<{ $active?: boolean }>`
   padding: 0.5rem 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.25rem;
-  background-color: ${props => props.$active ? '#4a5568' : 'white'};
-  color: ${props => props.$active ? 'white' : 'black'};
+  background-color: ${(props) => (props.$active ? "#4a5568" : "white")};
+  color: ${(props) => (props.$active ? "white" : "black")};
   cursor: pointer;
-  
+
   &:hover {
-    background-color: ${props => props.$active ? '#4a5568' : '#e2e8f0'};
+    background-color: ${(props) => (props.$active ? "#4a5568" : "#e2e8f0")};
   }
 `;
 
