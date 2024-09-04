@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { SectionTitle } from '@/styles';
-import WeaponQualitySection from './WeaponQualitySection';
-import JobSpecificOptionsSection from './JobSpecificOptionsSection';
-import ElixirSection from './ElixirSection';
-import AccessoriesSection from './AccessoriesSection';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { SectionTitle } from "@/styles";
+import WeaponQualitySection from "./WeaponQualitySection";
+import JobSpecificOptionsSection from "./JobSpecificOptionsSection";
+import AccessoriesSection from "./AccessoriesSection";
 
 const FixedOptionsContainer = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 0 1rem;
+  gap: 10px;
 `;
 
 interface FixedOptionsSectionProps {
-  setMyInfo: React.Dispatch<React.SetStateAction<{
-    criticalHitRate: number;
-    additionalDamage: number;
-    criticalDamage: number;
-    criticalDamageDealt: number;
-  }>>;
+  setMyInfo: React.Dispatch<
+    React.SetStateAction<{
+      criticalHitRate: number;
+      additionalDamage: number;
+      criticalDamage: number;
+      criticalDamageDealt: number;
+    }>
+  >;
   skillRatios: SkillRatios;
   setSkillRatios: React.Dispatch<React.SetStateAction<SkillRatios>>;
 }
@@ -45,11 +47,11 @@ interface Accessories {
 
 const FixedOptionsSection: React.FC<FixedOptionsSectionProps> = ({ setMyInfo, skillRatios, setSkillRatios }) => {
   const [lightningWhisper, setLightningWhisper] = useState(true);
-  const [elixir, setElixir] = useState('회심');
+  const [elixir, setElixir] = useState("회심");
   const [accessories, setAccessories] = useState<Accessories>({
-    ring1: { option1: '치명타 피해', option2: '', value1: 1.1, value2: 0 },
-    ring2: { option1: '치명타 확률', option2: '', value1: 0.4, value2: 0 },
-    bracelet: { option1: '치명타 피해', option2: '치명타 확률', value1: 8, value2: 5 }
+    ring1: { option1: "치명타 피해", option2: "", value1: 1.1, value2: 0 },
+    ring2: { option1: "치명타 확률", option2: "", value1: 0.4, value2: 0 },
+    bracelet: { option1: "치명타 피해", option2: "치명타 확률", value1: 8, value2: 5 },
   });
   const [weaponQuality, setWeaponQuality] = useState(100);
 
@@ -61,20 +63,19 @@ const FixedOptionsSection: React.FC<FixedOptionsSectionProps> = ({ setMyInfo, sk
     };
 
     const calculateCriticalHitRate = () => {
-      let baseRate = (
-        (accessories.ring1.option1 === '치명타 확률' ? accessories.ring1.value1 / 100 : 0) +
-        (accessories.ring1.option2 === '치명타 확률' ? accessories.ring1.value2 / 100 : 0) +
-        (accessories.ring2.option1 === '치명타 확률' ? accessories.ring2.value1 / 100 : 0) +
-        (accessories.ring2.option2 === '치명타 확률' ? accessories.ring2.value2 / 100 : 0) +
-        (accessories.bracelet.option1 === '치명타 확률' ? accessories.bracelet.value1 / 100 : 0) +
-        (accessories.bracelet.option2 === '치명타 확률' ? accessories.bracelet.value2 / 100 : 0)
-      );
+      let baseRate =
+        (accessories.ring1.option1 === "치명타 확률" ? accessories.ring1.value1 / 100 : 0) +
+        (accessories.ring1.option2 === "치명타 확률" ? accessories.ring1.value2 / 100 : 0) +
+        (accessories.ring2.option1 === "치명타 확률" ? accessories.ring2.value1 / 100 : 0) +
+        (accessories.ring2.option2 === "치명타 확률" ? accessories.ring2.value2 / 100 : 0) +
+        (accessories.bracelet.option1 === "치명타 확률" ? accessories.bracelet.value1 / 100 : 0) +
+        (accessories.bracelet.option2 === "치명타 확률" ? accessories.bracelet.value2 / 100 : 0);
 
       if (lightningWhisper) {
         baseRate += 0.2;
       }
 
-      if (elixir === '달인') {
+      if (elixir === "달인") {
         baseRate += 0.07;
       }
 
@@ -82,20 +83,19 @@ const FixedOptionsSection: React.FC<FixedOptionsSectionProps> = ({ setMyInfo, sk
     };
 
     let additionalDamage = calculateAdditionalDamage(weaponQuality);
-    if (elixir === '달인') {
+    if (elixir === "달인") {
       additionalDamage += 0.085;
     }
 
-    const criticalDamage = (
-      (accessories.ring1.option1 === '치명타 피해' ? accessories.ring1.value1 / 100 : 0) +
-      (accessories.ring1.option2 === '치명타 피해' ? accessories.ring1.value2 / 100 : 0) +
-      (accessories.ring2.option1 === '치명타 피해' ? accessories.ring2.value1 / 100 : 0) +
-      (accessories.ring2.option2 === '치명타 피해' ? accessories.ring2.value2 / 100 : 0) +
-      (accessories.bracelet.option1 === '치명타 피해' ? accessories.bracelet.value1 / 100 : 0) +
-      (accessories.bracelet.option2 === '치명타 피해' ? accessories.bracelet.value2 / 100 : 0)
-    );
+    const criticalDamage =
+      (accessories.ring1.option1 === "치명타 피해" ? accessories.ring1.value1 / 100 : 0) +
+      (accessories.ring1.option2 === "치명타 피해" ? accessories.ring1.value2 / 100 : 0) +
+      (accessories.ring2.option1 === "치명타 피해" ? accessories.ring2.value1 / 100 : 0) +
+      (accessories.ring2.option2 === "치명타 피해" ? accessories.ring2.value2 / 100 : 0) +
+      (accessories.bracelet.option1 === "치명타 피해" ? accessories.bracelet.value1 / 100 : 0) +
+      (accessories.bracelet.option2 === "치명타 피해" ? accessories.bracelet.value2 / 100 : 0);
 
-    const criticalDamageDealt = elixir === '회심' ? 0.12 : 0;
+    const criticalDamageDealt = elixir === "회심" ? 0.12 : 0;
 
     const calculatedInfo = {
       criticalHitRate: calculateCriticalHitRate(),
@@ -109,19 +109,15 @@ const FixedOptionsSection: React.FC<FixedOptionsSectionProps> = ({ setMyInfo, sk
 
   return (
     <FixedOptionsContainer>
-      <SectionTitle>고정 옵션</SectionTitle>
-      
-      <WeaponQualitySection weaponQuality={weaponQuality} setWeaponQuality={setWeaponQuality} />
-      
-      <JobSpecificOptionsSection 
+      <JobSpecificOptionsSection
         lightningWhisper={lightningWhisper}
         setLightningWhisper={setLightningWhisper}
         skillRatios={skillRatios}
         setSkillRatios={setSkillRatios}
       />
-      
-      <ElixirSection elixir={elixir} setElixir={setElixir} />
-      
+
+      <WeaponQualitySection weaponQuality={weaponQuality} setWeaponQuality={setWeaponQuality} />
+
       <AccessoriesSection accessories={accessories} setAccessories={setAccessories} />
     </FixedOptionsContainer>
   );

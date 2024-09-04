@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import FixedOptionsSection from "./FixedOptionsSection/FixedOptionsSection";
 import SelectableOptionsSection from "./selectableOptionSection/SelectableOptionsSection";
-import MyInfoSection from "./MyInfoSection";
+import { Info } from "lucide-react";
+import { Container, SectionTitle } from "@/styles";
 
 const CalculatorContainer = styled.div`
   display: flex;
@@ -29,13 +30,6 @@ const LeftColumn = styled.div`
   }
 `;
 
-const MyInfoWrapper = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: white;
-`;
-
 const ScrollableLeftContent = styled.div`
   flex: 1;
   overflow-y: auto;
@@ -45,6 +39,45 @@ const ScrollableLeftContent = styled.div`
 const RightColumn = styled.div`
   flex: 1;
   overflow-y: auto;
+`;
+
+const FixedOptionsTitleWrapper = styled(Container)`
+  padding: 0rem 1rem;
+`;
+
+const StyledInfoCircle = styled(Info)`
+  cursor: pointer;
+`;
+
+const TooltipContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const TooltipContent = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none;
+  white-space: nowrap;
+
+  ${TooltipContainer}:hover & {
+    display: block;
+  }
+`;
+
+const InfoItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
 `;
 
 interface MyInfo {
@@ -113,12 +146,37 @@ const EfficiencyCalculatorPage: React.FC = () => {
     }));
   };
 
+  const renderMyInfoTooltip = () => (
+    <TooltipContent>
+      <InfoItem>
+        <span>치명타 확률:</span>
+        <span>{(myInfo.criticalHitRate * 100).toFixed(2)}%</span>
+      </InfoItem>
+      <InfoItem>
+        <span>추가 피해:</span>
+        <span>{(myInfo.additionalDamage * 100).toFixed(2)}%</span>
+      </InfoItem>
+      <InfoItem>
+        <span>치명타 피해:</span>
+        <span>{(myInfo.criticalDamage * 100).toFixed(2)}%</span>
+      </InfoItem>
+      <InfoItem>
+        <span>치명타 주는 피해:</span>
+        <span>{(myInfo.criticalDamageDealt * 100).toFixed(2)}%</span>
+      </InfoItem>
+    </TooltipContent>
+  );
+
   return (
     <CalculatorContainer>
       <LeftColumn>
-        <MyInfoWrapper>
-          <MyInfoSection myInfo={myInfo} />
-        </MyInfoWrapper>
+        <FixedOptionsTitleWrapper>
+          <SectionTitle>고정 옵션</SectionTitle>
+          <TooltipContainer>
+            <StyledInfoCircle size={20} />
+            {renderMyInfoTooltip()}
+          </TooltipContainer>
+        </FixedOptionsTitleWrapper>
         <ScrollableLeftContent>
           <FixedOptionsSection setMyInfo={setMyInfo} skillRatios={skillRatios} setSkillRatios={setSkillRatios} />
         </ScrollableLeftContent>

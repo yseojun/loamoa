@@ -8,6 +8,11 @@ interface FixedStats {
 }
 
 interface SelectableStats {
+  elixir: {
+    effect: string;
+    type: string;
+  };
+  petStat: string;
   engravings: Array<{ engraving: string; level: string; abilityStone: string }>;
   evolution: number[];
 }
@@ -26,6 +31,8 @@ export class Character {
   crit_stat: number = 66;
   is_keen: boolean = false;
   skillRatios: { [key: string]: number };
+  spec_stat: number = 0;
+  swift_stat: number = 0;
 
   constructor(fixedStats: FixedStats, selectableStats: SelectableStats, skillRatios: { [key: string]: number }) {
     this.apply_fixed_stat(fixedStats);
@@ -34,7 +41,6 @@ export class Character {
     this.skillRatios = skillRatios;
     this.logStats();
   }
-
   apply_fixed_stat(fixedStats: FixedStats) {
     this.crit_rate += fixedStats.criticalHitRate;
     this.crit_dmg += fixedStats.criticalDamage;
@@ -42,7 +48,38 @@ export class Character {
     this.additional_dmg += fixedStats.additionalDamage;
   }
 
+  apply_elixir(elixir: { effect: string; type: string }) {
+    if (elixir.effect === "치명타 피해") {
+      this.crit_dmg += 0.07;
+    } else if (elixir.effect === "추가 피해") {
+      this.additional_dmg += 0.031;
+    }
+
+    if (elixir.type === "회심") {
+      this.crit_hit_dmg += 0.12;
+    } else if (elixir.type === "달인") {
+      this.crit_rate += 0.07;
+      this.additional_dmg += 0.085;
+    }
+  }
+
+  apply_pet_stat(petStat: string) {
+    switch (petStat) {
+      case "치명":
+        this.crit_stat += 160;
+        break;
+      case "특화":
+        this.spec_stat += 160;
+        break;
+      case "신속":
+        this.swift_stat += 160;
+        break;
+    }
+  }
+
   apply_selectable_stat(selectableStats: SelectableStats) {
+    this.apply_elixir(selectableStats.elixir);
+    this.apply_pet_stat(selectableStats.petStat);
     this.apply_engraving(selectableStats.engravings);
     this.apply_evolution(selectableStats.evolution);
   }
@@ -134,9 +171,9 @@ export class Character {
   }
 
   apply_evolution(evolution: number[]) {
-    // 예리한 감각
-    this.crit_stat += evolution[2] * 50;
+    this.crit_stat += evolution[0] * 50;
 
+    // 예리한 감각
     if (evolution[8] === 15) {
       this.crit_rate += 0.04;
       this.evol_dmg += 0.05;

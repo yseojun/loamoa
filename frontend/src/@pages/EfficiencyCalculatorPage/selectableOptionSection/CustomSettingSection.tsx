@@ -1,8 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import EngravingSelection from './EngravingSelection';
-import EvolutionSection from './EvolutionSection';
-import { SectionTitle, Button } from '@/styles';
+import React from "react";
+import styled from "styled-components";
+import EngravingSelection from "./EngravingSelection";
+import EvolutionSection from "./EvolutionSection";
+import ElixirSection from "./ElixirSection";
+import PetStatSection from "./PetStatSection";
+import { SectionTitle, Button } from "@/styles";
 
 const Container = styled.div`
   border: 1px solid #e2e8f0;
@@ -10,42 +12,26 @@ const Container = styled.div`
   padding: 20px;
   position: relative;
   display: flex;
-  width: calc(100% - 140px);
-`;
-
-const LeftColumn = styled.div`
-  flex: 1;
-  margin-right: 20px;
-`;
-
-const RightColumn = styled.div`
-  flex: 1;
-  display: flex;
   flex-direction: column;
+  width: 28rem;
+  gap: 1rem;
 `;
 
 const Header = styled.div`
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ActionButtons = styled.div`
-  position: absolute;
-  right: -100px;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
   gap: 10px;
 `;
 
 const ActionButton = styled(Button)`
   width: 80px;
   height: 40px;
-  border-radius: 20px;
   font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 interface CustomSettingProps {
@@ -54,23 +40,33 @@ interface CustomSettingProps {
   onDelete: () => void;
   onDuplicate: () => void;
   setting: {
+    elixir: {
+      effect: string;
+      type: string;
+    };
+    petStat: string;
     engravings: Array<{ engraving: string; level: string; abilityStone: string }>;
     evolution: number[];
   };
   onUpdate: (setting: {
+    elixir: { effect: string; type: string };
+    petStat: string;
     engravings: Array<{ engraving: string; level: string; abilityStone: string }>;
     evolution: number[];
   }) => void;
 }
 
-const CustomSettingSection: React.FC<CustomSettingProps> = ({
-  id,
-  canDelete,
-  onDelete,
-  onDuplicate,
-  setting,
-  onUpdate,
-}) => {
+const CustomSettingSection: React.FC<CustomSettingProps> = ({ id, canDelete, onDelete, onDuplicate, setting, onUpdate }) => {
+  const handleElixirChange = (value: React.SetStateAction<{ effect: string; type: string }>) => {
+    const newElixir = typeof value === "function" ? value(setting.elixir) : value;
+    onUpdate({ ...setting, elixir: newElixir });
+  };
+
+  const handlePetStatChange = (value: React.SetStateAction<string>) => {
+    const newPetStat = typeof value === "function" ? value(setting.petStat) : value;
+    onUpdate({ ...setting, petStat: newPetStat });
+  };
+
   const handleEngravingChange = (engravings: Array<{ engraving: string; level: string; abilityStone: string }>) => {
     onUpdate({ ...setting, engravings });
   };
@@ -81,19 +77,17 @@ const CustomSettingSection: React.FC<CustomSettingProps> = ({
 
   return (
     <Container>
-      <LeftColumn>
-        <Header>
-          <SectionTitle>세팅 {id} </SectionTitle>
-        </Header>
-        <EngravingSelection options={setting.engravings} onChange={handleEngravingChange} />
-      </LeftColumn>
-      <RightColumn>
-        <EvolutionSection values={setting.evolution} onChange={handleEvolutionChange} />
-      </RightColumn>
-      <ActionButtons>
-        {canDelete && <ActionButton onClick={onDelete}>-</ActionButton>}
-        <ActionButton onClick={onDuplicate}>복제</ActionButton>
-      </ActionButtons>
+      <Header>
+        <SectionTitle>세팅 {id}</SectionTitle>
+        <ActionButtons>
+          {canDelete && <ActionButton onClick={onDelete}>삭제</ActionButton>}
+          <ActionButton onClick={onDuplicate}>복제</ActionButton>
+        </ActionButtons>
+      </Header>
+      <ElixirSection elixir={setting.elixir} setElixir={handleElixirChange} />
+      <PetStatSection petStat={setting.petStat} setPetStat={handlePetStatChange} />
+      <EngravingSelection options={setting.engravings} onChange={handleEngravingChange} />
+      <EvolutionSection values={setting.evolution} onChange={handleEvolutionChange} />
     </Container>
   );
 };

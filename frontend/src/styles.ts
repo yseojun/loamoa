@@ -40,7 +40,7 @@ export const ButtonGroup = styled.div`
 
 export const Button = styled.button<{ $active?: boolean }>`
   padding: 0.5rem 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #bbbbbb;
   border-radius: 0.25rem;
   background-color: ${(props) => (props.$active ? "#4a5568" : "white")};
   color: ${(props) => (props.$active ? "white" : "black")};

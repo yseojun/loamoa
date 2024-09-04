@@ -1,49 +1,27 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import CustomSettingSection from './CustomSettingSection';
-import { Button } from '@/styles';
-import { Character } from '@/utils/Character';
-import CalculationResultGraph from './CalculationResultGraph';
+import React, { useState } from "react";
+import styled from "styled-components";
+import CustomSettingSection from "./CustomSettingSection";
+import { Button } from "@/styles";
+import { Character } from "@/utils/Character";
+import CalculationResultGraph from "./CalculationResultGraph";
+import PetStatSection from "./PetStatSection";
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`;
-
-const ScrollableContent = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  padding-bottom: 80px;
-`;
-
-const ButtonContainer = styled.div`
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background: white;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const AddButtonWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
+  position: relative;
+  padding: 12px 20px;
 `;
 
 const AddButton = styled(Button)`
-  width: 40px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   height: 40px;
-  border-radius: 50%;
-  font-size: 24px;
+  border-radius: 20px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 `;
 
 const CalculateButton = styled(Button)`
@@ -51,6 +29,7 @@ const CalculateButton = styled(Button)`
   border-radius: 20px;
   font-size: 16px;
   padding: 0 20px;
+  margin-bottom: 0.5rem;
 `;
 
 const ModalOverlay = styled.div`
@@ -77,6 +56,11 @@ const MAX_SETTINGS = 10;
 
 interface CustomSetting {
   id: number;
+  elixir: {
+    effect: string;
+    type: string;
+  };
+  petStat: string;
   engravings: Array<{ engraving: string; level: string; abilityStone: string }>;
   evolution: number[];
 }
@@ -96,16 +80,19 @@ interface CalculationResult {
 
 const initialSetting: CustomSetting = {
   id: 1,
+  elixir: {
+    effect: "치명타 피해",
+    type: "회심",
+  },
+  petStat: "치명",
   engravings: [
-    { engraving: '원한', level: '유물0', abilityStone: '0lv' },
-    { engraving: '아드레날린', level: '유물0', abilityStone: '3lv' },
-    { engraving: '저주받은 인형', level: '유물0', abilityStone: '2lv' },
-    { engraving: '예리한 둔기', level: '유물0', abilityStone: '0lv' },
-    { engraving: '슈퍼차지', level: '유물4', abilityStone: '0lv' },
+    { engraving: "원한", level: "유물0", abilityStone: "0lv" },
+    { engraving: "아드레날린", level: "유물0", abilityStone: "3lv" },
+    { engraving: "저주받은 인형", level: "유물0", abilityStone: "2lv" },
+    { engraving: "예리한 둔기", level: "유물0", abilityStone: "0lv" },
+    { engraving: "슈퍼차지", level: "유물4", abilityStone: "0lv" },
   ],
-  evolution: [
-    0, 30, 10, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 30, 0, 0
-  ],
+  evolution: [10, 30, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 30, 0, 0],
 };
 
 interface SelectableOptionsSectionProps {
@@ -128,7 +115,12 @@ const SelectableOptionsSection: React.FC<SelectableOptionsSectionProps> = ({ myI
       const newId = customSettings.length + 1;
       const emptySetting: CustomSetting = {
         id: newId,
-        engravings: Array(5).fill({ engraving: '', level: '유물0', abilityStone: '0lv' }),
+        elixir: {
+          effect: "치명타 피해",
+          type: "회심",
+        },
+        petStat: "치명",
+        engravings: Array(5).fill({ engraving: "", level: "유물0", abilityStone: "0lv" }),
         evolution: Array(24).fill(0),
       };
       setCustomSettings([...customSettings, emptySetting]);
@@ -138,15 +130,14 @@ const SelectableOptionsSection: React.FC<SelectableOptionsSectionProps> = ({ myI
   };
 
   const removeCustomSetting = (id: number) => {
-    const updatedSettings = customSettings.filter(setting => setting.id !== id)
-      .map((setting, index) => ({ ...setting, id: index + 1 }));
+    const updatedSettings = customSettings.filter((setting) => setting.id !== id).map((setting, index) => ({ ...setting, id: index + 1 }));
     setCustomSettings(updatedSettings);
   };
 
   const duplicateCustomSetting = (setting: CustomSetting) => {
     if (customSettings.length < MAX_SETTINGS) {
       const newSettings = [...customSettings];
-      const index = newSettings.findIndex(s => s.id === setting.id);
+      const index = newSettings.findIndex((s) => s.id === setting.id);
       const newSetting = { ...JSON.parse(JSON.stringify(setting)), id: customSettings.length + 1 };
       newSettings.splice(index + 1, 0, newSetting);
       const updatedSettings = newSettings.map((setting, index) => ({ ...setting, id: index + 1 }));
@@ -157,23 +148,23 @@ const SelectableOptionsSection: React.FC<SelectableOptionsSectionProps> = ({ myI
   };
 
   const updateCustomSetting = (id: number, updatedSetting: Partial<CustomSetting>) => {
-    const updatedSettings = customSettings.map(setting =>
-      setting.id === id ? { ...setting, ...updatedSetting } : setting
-    );
+    const updatedSettings = customSettings.map((setting) => (setting.id === id ? { ...setting, ...updatedSetting } : setting));
     setCustomSettings(updatedSettings);
   };
 
   const handleCalculate = async () => {
     setIsCalculating(true);
     try {
-      const results: CalculationResult[] = await Promise.all(customSettings.map(async (setting) => {
-        const character = new Character(myInfo, setting, skillRatios);
-        const results = Array.from({ length: 11 }, (_, i) => {
-          const backAttackRate = (i + 1) * 0.1;
-          return character.get_final_dmg(backAttackRate);
-        });
-        return { id: setting.id, results };
-      }));
+      const results: CalculationResult[] = await Promise.all(
+        customSettings.map(async (setting) => {
+          const character = new Character(myInfo, setting, skillRatios);
+          const results = Array.from({ length: 11 }, (_, i) => {
+            const backAttackRate = (i + 1) * 0.1;
+            return character.get_final_dmg(backAttackRate);
+          });
+          return { id: setting.id, results };
+        })
+      );
       setCalculationResults(results);
       console.log("Calculation results:", results);
     } catch (error) {
@@ -185,30 +176,24 @@ const SelectableOptionsSection: React.FC<SelectableOptionsSectionProps> = ({ myI
 
   return (
     <Container>
-      <ScrollableContent>
-        {calculationResults.length > 0 && (
-          <CalculationResultGraph results={calculationResults} />
-        )}
-        {customSettings.map((setting) => (
-          <CustomSettingSection
-            key={setting.id}
-            id={setting.id}
-            canDelete={customSettings.length > 1}
-            onDelete={() => removeCustomSetting(setting.id)}
-            onDuplicate={() => duplicateCustomSetting(setting)}
-            setting={setting}
-            onUpdate={(updatedSetting) => updateCustomSetting(setting.id, updatedSetting)}
-          />
-        ))}
-      </ScrollableContent>
-      <ButtonContainer>
-        <AddButtonWrapper>
-          <AddButton onClick={addCustomSetting} disabled={customSettings.length >= MAX_SETTINGS}>+</AddButton>
-        </AddButtonWrapper>
-        <CalculateButton onClick={handleCalculate} disabled={isCalculating}>
-          {isCalculating ? '계산 중...' : '계산하기'}
-        </CalculateButton>
-      </ButtonContainer>
+      <CalculateButton onClick={handleCalculate} disabled={isCalculating}>
+        {isCalculating ? "계산 중..." : "계산하기"}
+      </CalculateButton>
+      {calculationResults.length > 0 && <CalculationResultGraph results={calculationResults} />}
+      {customSettings.map((setting) => (
+        <CustomSettingSection
+          key={setting.id}
+          id={setting.id}
+          canDelete={customSettings.length > 1}
+          onDelete={() => removeCustomSetting(setting.id)}
+          onDuplicate={() => duplicateCustomSetting(setting)}
+          setting={setting}
+          onUpdate={(updatedSetting) => updateCustomSetting(setting.id, updatedSetting)}
+        />
+      ))}
+      <AddButton onClick={addCustomSetting} disabled={customSettings.length >= MAX_SETTINGS}>
+        +
+      </AddButton>
       {isCalculating && (
         <ModalOverlay>
           <ModalContent>

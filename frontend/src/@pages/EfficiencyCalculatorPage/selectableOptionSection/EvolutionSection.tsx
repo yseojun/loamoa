@@ -1,8 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Button } from '@/styles';
+import React from "react";
+import styled from "styled-components";
+import { Button, SubSectionTitle } from "@/styles";
 
-const Container = styled.div`
+const SectionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const EvolutionTitle = styled(SubSectionTitle)`
+  margin-bottom: 1rem;
+`;
+
+const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
@@ -71,33 +80,33 @@ const EvolutionNode: React.FC<EvolutionNodeProps> = ({ name, maxValue, step, val
 };
 
 const evolutionData = [
-  { name: '신속', maxValue: 30, step: 1 },
-  { name: '특화', maxValue: 30, step: 1 },
-  { name: '치명', maxValue: 30, step: 1 },
-  { name: '제압', maxValue: 30, step: 1 },
-  { name: '인내', maxValue: 30, step: 1 },
-  { name: '숙련', maxValue: 30, step: 1 },
-  
-  { name: '끝없는 마나', maxValue: 30, step: 15 },
-  { name: '금단의 주문', maxValue: 30, step: 15 },
-  { name: '예리한 감각', maxValue: 30, step: 15 },
-  { name: '한계돌파', maxValue: 30, step: 10 },
-  { name: '최적화 훈련', maxValue: 30, step: 15 },
-  { name: '축복의 여신', maxValue: 30, step: 10 },
+  { name: "치명 ", maxValue: 30, step: 1 },
+  { name: "특화", maxValue: 30, step: 1 },
+  { name: "신속", maxValue: 30, step: 1 },
+  { name: "제압", maxValue: 30, step: 1 },
+  { name: "인내", maxValue: 30, step: 1 },
+  { name: "숙련", maxValue: 30, step: 1 },
 
-  { name: '무한한 마력', maxValue: 20, step: 10 },
-  { name: '혼신의 강타', maxValue: 20, step: 10 },
-  { name: '일격', maxValue: 20, step: 10 },
-  { name: '파괴전차', maxValue: 20, step: 10 },
-  { name: '타이밍 지배', maxValue: 20, step: 10 },
-  { name: '정열의 춤사위', maxValue: 20, step: 10 },
+  { name: "끝없는 마나", maxValue: 30, step: 15 },
+  { name: "금단의 주문", maxValue: 30, step: 15 },
+  { name: "예리한 감각", maxValue: 30, step: 15 },
+  { name: "한계돌파", maxValue: 30, step: 10 },
+  { name: "최적화 훈련", maxValue: 30, step: 15 },
+  { name: "축복의 여신", maxValue: 30, step: 10 },
 
-  { name: '뭉툭한가시', maxValue: 30, step: 15 },
-  { name: '음속 돌파', maxValue: 30, step: 15 },
-  { name: '인파이팅', maxValue: 30, step: 15 },
-  { name: '입식타격가', maxValue: 30, step: 15 },
-  { name: '마나용광로', maxValue: 30, step: 15 },
-  { name: '안정된 관리자', maxValue: 30, step: 15 },
+  { name: "무한한 마력", maxValue: 20, step: 10 },
+  { name: "혼신의 강타", maxValue: 20, step: 10 },
+  { name: "일격", maxValue: 20, step: 10 },
+  { name: "파괴전차", maxValue: 20, step: 10 },
+  { name: "타이밍 지배", maxValue: 20, step: 10 },
+  { name: "정열의 춤사위", maxValue: 20, step: 10 },
+
+  { name: "뭉툭한가시", maxValue: 30, step: 15 },
+  { name: "음속 돌파", maxValue: 30, step: 15 },
+  { name: "인파이팅", maxValue: 30, step: 15 },
+  { name: "입식타격가", maxValue: 30, step: 15 },
+  { name: "마나용광로", maxValue: 30, step: 15 },
+  { name: "안정된 관리자", maxValue: 30, step: 15 },
 ];
 
 interface EvolutionSectionProps {
@@ -113,16 +122,14 @@ const EvolutionSection: React.FC<EvolutionSectionProps> = ({ values, onChange })
   };
 
   return (
-    <Container>
-      {evolutionData.map((data, index) => (
-        <EvolutionNode
-          key={index}
-          {...data}
-          value={values[index]}
-          onChange={(value) => handleNodeChange(index, value)}
-        />
-      ))}
-    </Container>
+    <SectionContainer>
+      <EvolutionTitle>진화</EvolutionTitle>
+      <GridContainer>
+        {evolutionData.map((data, index) => (
+          <EvolutionNode key={index} {...data} value={values[index]} onChange={(value) => handleNodeChange(index, value)} />
+        ))}
+      </GridContainer>
+    </SectionContainer>
   );
 };
 
